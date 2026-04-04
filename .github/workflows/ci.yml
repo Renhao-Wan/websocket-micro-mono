@@ -1,0 +1,37 @@
+name: CI 矩阵测试
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: 测试 (JDK ${{ matrix.java-version }} / ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        java-version: [ '17', '21' ]
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: temurin
+          cache: maven
+
+      - name: 构建并测试 websocket-mono
+        run: mvn -B verify --no-transfer-progress
+        working-directory: websocket-mono
+
+      - name: 构建并测试 websocket-micro
+        run: mvn -B verify --no-transfer-progress
+        working-directory: websocket-micro

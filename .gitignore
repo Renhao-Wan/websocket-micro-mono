@@ -1,0 +1,17 @@
+.idea
+.vscode
+.claude
+.kiro
+
+# Maven 编译产物
+target/
+*.class
+
+# IntelliJ IDEA
+*.iws
+*.iml
+*.ipr
+
+# 日志文件
+*.log
+hs_err_pid*.log
